@@ -1,0 +1,9 @@
+# CYBER SERVER
+sock_port: 1234
+idle_time: 600
+server_id: 1
+backlog: 20
+
+# CYBER BROADCAST
+bc_host: 127.0.0.1
+bc_port: 8888
