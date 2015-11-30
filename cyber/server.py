@@ -9,6 +9,7 @@ from .pool import HandleThreadsPool
 from .log import server_logger, client_logger
 from .protocol import Protocol
 
+
 class Client(object):
     def __init__(self, handler, protocol, server):
         '''
@@ -28,7 +29,7 @@ class Client(object):
 
         self._recvbuffer = ''
         self._sent_bytes = 0
-        
+
         self.sid = None
         self.uid = None
 
@@ -108,11 +109,13 @@ class Client(object):
         idle = time.time() - self._last_action_time
 
         if idle > self.server.idle_time:
-            client_logger.debug("[Client %s] Idled over %s seconds, kicked." %(self.id, idle))
+            client_logger.debug("[Client %s] Idled over %s seconds, kicked." %
+                                (self.id, idle))
             self.handle_close()
             return True
 
         return False
+
 
 class Server(object):
     server = None
@@ -129,12 +132,12 @@ class Server(object):
         self.request_handler = None
         self.bc_host = None
         self.bc_port = None
-        assert(isinstance(protocol, Protocol))
+        assert (isinstance(protocol, Protocol))
         self.protocol = protocol
         if client_cls is None:
             self.client_cls = Client
         else:
-            assert(issubclass(client_cls, Client))
+            assert (issubclass(client_cls, Client))
             self.client_cls = client_cls
 
     def impl(self, *sub, **kw):
@@ -142,12 +145,14 @@ class Server(object):
         raise NotImplementedError("Server.impl")
 
     def initialize(self):
-        assert(self.server_id>0 and self.server_id<65536)
-        assert(callable(self.request_handler))
+        assert (self.server_id > 0 and self.server_id < 65536)
+        assert (callable(self.request_handler))
         self.socket_server = SocketServer(self.port, self.backlog, self)
         self.pool = HandleThreadsPool(self.request_handler, self.pool_size)
         if self.bc_host and self.bc_port:
-            self.broadcast_client = BroadcastClient(self.bc_host, self.bc_port, self.server_id, self.protocol, self)
+            self.broadcast_client = BroadcastClient(
+                self.bc_host, self.bc_port, self.server_id, self.protocol,
+                self)
 
     def on_stop(self):
         raise NotImplementedError("Server.on_stop")

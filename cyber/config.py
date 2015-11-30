@@ -4,10 +4,12 @@ DEFAULT_POOL_SIZE = 20
 DEFAULT_IDLE_TIME = 600
 DEFAULT_BACKLOG = 20
 
+
 def _load_default_settings():
     return dict(pool_size=DEFAULT_POOL_SIZE,
                 idle_time=DEFAULT_IDLE_TIME,
                 backlog=DEFAULT_BACKLOG)
+
 
 class _Options(object):
     _inst = None

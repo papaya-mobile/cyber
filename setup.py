@@ -9,5 +9,4 @@ setup(name='cyber',
       packages=['cyber'],
       description='A distribute python socket framework',
       author='Papaya Backend',
-      author_email='backend@papayamobile.com',
-      )
+      author_email='backend@papayamobile.com', )

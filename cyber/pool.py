@@ -8,6 +8,7 @@ import collections
 from .log import server_logger
 from .config import DEFAULT_POOL_SIZE
 
+
 class HandleThread(threading.Thread):
     total = 0
 
@@ -75,7 +76,8 @@ class HandleThread(threading.Thread):
                         func, args, kwargs = request[1:]
                         func(*args, **kwargs)
                     else:
-                        raise Exception("Unknown request_type %s." % request_type)
+                        raise Exception("Unknown request_type %s." %
+                                        request_type)
                 except Exception, e:
                     server_logger.exception(e)
                 finally:

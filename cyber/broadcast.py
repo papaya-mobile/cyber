@@ -12,6 +12,7 @@ except Exception, e:
 
 MAX_PACKAGE_LENGTH = 1024 * 1024  # 1 Mb
 
+
 class ListenClient(asyncore.dispatcher):
     def __init__(self, sock, addr, protocol, server):
         print "Got connection"
@@ -36,7 +37,8 @@ class ListenClient(asyncore.dispatcher):
             if self._myid > 0:
                 # server_id == 0 is only a client
                 self._sock_server.clients[self._myid] = self
-            broadcast_logger.debug("ACPT new conn from %s, SERVER(%s)"%(self._myid, self._sock_server.clients))
+            broadcast_logger.debug("ACPT new conn from %s, SERVER(%s)" %
+                                   (self._myid, self._sock_server.clients))
             self._init = True
 
     def handle_read(self):
@@ -68,7 +70,7 @@ class ListenClient(asyncore.dispatcher):
                 self._recvbuffer = self._recvbuffer[offset:]
                 if self._target <= 0:
                     # Close connection gently
-                    broadcast_logger.debug("wrong target(%s)"%(self._target))
+                    broadcast_logger.debug("wrong target(%s)" % (self._target))
                     self._target = None
                     self.handle_close()
                     return
@@ -114,6 +116,7 @@ class ListenClient(asyncore.dispatcher):
         except Exception, e:
             pass
 
+
 class ListenServer(asyncore.dispatcher):
     def __init__(self, port, backlog, protocol):
         asyncore.dispatcher.__init__(self)
@@ -123,11 +126,11 @@ class ListenServer(asyncore.dispatcher):
         self.bind(("", port))
         self.listen(backlog)
         self.clients = {}
-        assert(isinstance(protocol, Protocol))
+        assert (isinstance(protocol, Protocol))
         self.protocol = protocol
 
     def send_to(self, server_id, data):
-        broadcast_logger.debug("Send %s to %s"%(data, server_id))
+        broadcast_logger.debug("Send %s to %s" % (data, server_id))
         if server_id in self.clients:
             self.clients[server_id].send_data(data)
 
@@ -145,7 +148,8 @@ class ListenServer(asyncore.dispatcher):
         except Exception, e:
             broadcast_logger.exception(e)
 
+
 def start_broadcast(port, backlog, protocol):
-    print "start broadcast server listen %s"%port
+    print "start broadcast server listen %s" % port
     ListenServer(port, backlog, protocol)
     asyncore.loop(use_poll=True)

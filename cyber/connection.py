@@ -10,7 +10,8 @@ try:
 except Exception, e:
     pass
 
-MAX_PACKAGE_LENGTH = 256 * 1024 # 256 KB
+MAX_PACKAGE_LENGTH = 256 * 1024  # 256 KB
+
 
 class SocketHandler(asyncore.dispatcher):
     def __init__(self, sock, addr):
@@ -74,7 +75,8 @@ class SocketServer(asyncore.dispatcher):
         self.set_reuse_addr()
         self.bind(('', port))
         self.listen(backlog)
-        server_logger.info("SocketServer listen on port %s (backlog: %s)"  % (port, backlog))
+        server_logger.info("SocketServer listen on port %s (backlog: %s)" %
+                           (port, backlog))
 
     def handle_accept(self):
         try:
@@ -92,6 +94,7 @@ class SocketServer(asyncore.dispatcher):
             self.close()
         except Exception, e:
             server_logger.exception(e)
+
 
 class BroadcastClient(asyncore.dispatcher):
     def __init__(self, host, port, server_id, protocol, server=None):
@@ -132,7 +135,10 @@ class BroadcastClient(asyncore.dispatcher):
         with self._closelock:
             if self.opened:
                 self.opened = False
-                threading.Timer(2, _delayreconnect, args=(self.host, self.port, self._server_id, self._protocol),
+                threading.Timer(2,
+                                _delayreconnect,
+                                args=(self.host, self.port, self._server_id,
+                                      self._protocol),
                                 kwargs={'server': self._server}).start()
                 self.close()
 
@@ -176,12 +182,14 @@ class BroadcastClient(asyncore.dispatcher):
             self._read_buffer = self._read_buffer[offset:]
             self._recved_msgs.append(data)
 
+
 def _delayreconnect(host, port, server_id, protocol, server):
     client = BroadcastClient(host, port, server_id, protocol)
     # replace the "broadcast_client" of server with new BroadcastClient
     server.broadcast_client = client
 
+
 def broadcast_cmd(broadcast_client, protocol, server_id, msg):
     packed_serverid = protocol.pack_serverid(server_id)
     packed_data = protocol.pack_data(msg)
-    broadcast_client.send_event(packed_serverid+packed_data)
+    broadcast_client.send_event(packed_serverid + packed_data)
