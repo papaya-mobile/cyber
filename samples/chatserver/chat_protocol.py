@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+
 import struct
-import json
 
 from cyber.protocol import Protocol
 

@@ -1,12 +1,11 @@
-import random
-import logging
+# -*- coding: utf-8 -*-
+
 import uuid
 import os
 
-from cyber import options
 from cyber.server import Server, Client
 from cyber.connection import broadcast_cmd
-from cyber import server_logger, client_logger
+from cyber import server_logger
 
 
 def save_session(user_id, session_id, server_id):

@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 import weakref
 import time
 import threading
 import asyncore
-import datetime
 
-from .connection import SocketServer, SocketHandler, BroadcastClient
+from .connection import SocketServer, BroadcastClient
 from .pool import HandleThreadsPool
 from .log import server_logger, client_logger
 from .protocol import Protocol
@@ -188,7 +189,7 @@ class Server(object):
     def start_loop(self):
         self.info()
         err_cnt = 0
-        lastt = time.time()
+
         while (not self.dead) or self.clients:
             # 1. Handle broadcast msg
             if self.broadcast_client:

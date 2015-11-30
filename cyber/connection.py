@@ -52,8 +52,8 @@ class SocketHandler(asyncore.dispatcher):
                 try:
                     sent = self.send(self._buffer)
                     self._buffer = self._buffer[sent:]
-                except socket.error, e:
-                    self.handle_close('Error send data')
+                except socket.error as e:
+                    self.handle_close('Error send data: %s' % e)
 
     def handle_expt(self):
         self.handle_close()

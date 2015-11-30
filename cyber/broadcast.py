@@ -15,7 +15,8 @@ MAX_PACKAGE_LENGTH = 1024 * 1024  # 1 Mb
 
 class ListenClient(asyncore.dispatcher):
     def __init__(self, sock, addr, protocol, server):
-        print "Got connection"
+        broadcast_logger.info("Got connection")
+
         asyncore.dispatcher.__init__(self, sock=sock)
         self._addr = addr
         self._sock_server = server
@@ -98,7 +99,8 @@ class ListenClient(asyncore.dispatcher):
             try:
                 sent = self.send(self._buffer)
                 self._buffer = self._buffer[sent:]
-            except Exception, e:
+            except Exception:
+                broadcast_logger.exception('ListenClient.handle_write')
                 self.handle_close()
 
     def handle_expt(self):
@@ -108,13 +110,13 @@ class ListenClient(asyncore.dispatcher):
         try:
             if self._myid in self._sock_server.clients:
                 self._sock_server.clients.pop(self._myid)
-        except Exception, e:
-            pass
+        except Exception:
+            broadcast_logger.exception('ListenClient.handle_close')
 
         try:
             self.close()
-        except Exception, e:
-            pass
+        except Exception:
+            broadcast_logger.exception('ListenClient.handle_close')
 
 
 class ListenServer(asyncore.dispatcher):
@@ -150,6 +152,6 @@ class ListenServer(asyncore.dispatcher):
 
 
 def start_broadcast(port, backlog, protocol):
-    print "start broadcast server listen %s" % port
+    broadcast_logger.inof("start broadcast server listen %s" % port)
     ListenServer(port, backlog, protocol)
     asyncore.loop(use_poll=True)
