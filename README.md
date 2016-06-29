@@ -6,7 +6,7 @@ Cyber is a distributed async socket framework based on Python asyncore.dispatche
 
 Install Kiwi from source:
 
-    $ git clone git://github.com/papaya-eng/cyber.git
+    $ git clone https://github.com/papaya-mobile/cyber.git
     $ cd cyber
     $ python setup.py install
 
